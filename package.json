@@ -2,7 +2,7 @@
   "name": "Krypt",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "bot.js",
   "dependencies": {
     "discord.js": "^11.4.2",
     "weather-js": "^2.0.0"
