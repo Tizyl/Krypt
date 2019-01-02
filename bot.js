@@ -5,7 +5,7 @@ const weather = require('weather-js');
 const fs = require('fs');
 
 //calling in json files
-const commands = JSON.parse(fs.readFileSync('commands.json', 'utf8'));
+const commands = JSON.parse(fs.readFileSync('Storage/commands.json', 'utf8'));
 
 
 //global settings
@@ -171,7 +171,7 @@ bot.on('message', message => {
                         embed.addField(`${commands[cmd].name}`, `**Description:** ${commands[cmd].desc}\n**Usage:** ${prefix + commands[cmd].usage}`);
 
                     }
-                    embed.setFooter(`Currently showing User commands. To view another group do ${prefix}help [group / command]`)
+                    embed.setFooter(`Currently showing ${groupFound} commands. To view another group do ${prefix}help [group / command]`)
                     embed.setDescription(`**${commandsFound} commands found** - <> means required, [] means optional`)
 
                 }
@@ -180,6 +180,97 @@ bot.on('message', message => {
                     color: 0x1D82B6,
                     description: `**Check your DMs ${message.author}!**`
                 }})
+        } else if (args.join(" ").toUpperCase() === 'GROUPS') {
+
+            let groups = '';
+
+            for(var cmd in commands) {
+                if(!groups.includes(commands[cmd].group)) {
+                    groups += `${commands[cmd].group}\n`
+                }
+            }
+
+            message.channel.send({embed: {
+                description: `**${groups}**`,
+                title:"Groups",
+                color: 0x1D82B6,
+                
+            }})
+
+            return;
+
+        } else {
+
+            let groupFound = '';
+
+            for(var cmd in commands) {
+                
+                if(args.join(" ").trim().toUpperCase() === commands[cmd].group.toUpperCase()) {
+                    groupFound = commands[cmd].group.toUpperCase();
+                    break;
+                }
+
+            }
+            if(groupFound != '') {
+                const embed = new Discord.RichEmbed()
+                .setColor(0x1D82B6)
+
+                let commandsFound = 0;
+
+                for(var cmd in commands) {
+                    if(commands[cmd].group.toUpperCase() === groupFound) {
+                        
+                        commandsFound++
+
+                        embed.addField(`${commands[cmd].name}`, `**Description:** ${commands[cmd].desc}\n**Usage:** ${prefix + commands[cmd].usage}`);
+
+                    }
+                    
+                }
+                embed.setFooter(`Currently showing ${groupFound} commands. To view another group do ${prefix}help [group / command]`)
+                embed.setDescription(`**${commandsFound} commands found** - <> means required, [] means optional`)
+
+                message.author.send({embed})
+                message.channel.send({embed: {
+                    color: 0x1D82B6,
+                    description: `**Check your DMs ${message.author}!**`
+                }})
+                return;
+                
+            }
+            
+            
+            let commandFound = '';
+            let commandDesc = '';
+            let commandUsage = '';
+            let commandGroup = ''
+
+            for(var cmd in commands) {
+                if(args.join(" ").trim().toUpperCase() === commands[cmd].name.toUpperCase()) {
+                    commandFound = commands[cmd].name;
+                    commandDesc = commands[cmd].desc;
+                    commandUsage = commands[cmd].usage;
+                    commandGroup = commands[cmd].group;
+                    break;
+                }
+            }
+            if(commandFound === '') {
+                 message.channel.send({embed: {
+                description: `**No group or command found titled \`${args.join(" ")}\`**`,
+                color: 0x1D82B6,
+                
+            }})
+
+            }
+
+            message.channel.send({embed: {
+                title: '<> means required, [] means optional',
+                color: 0x1D82B6,
+                fields: [{
+                    name:commandFound,
+                    value:`**Description:** ${commandDesc}\n**Usage:** ${commandUsage}\n**Group:** ${commandGroup}`
+                }]
+            }})
         }
     }
 
@@ -191,7 +282,6 @@ bot.on('ready', () => {
     bot.user.setActivity('Tizyl#4609', {type: 'Listening'});
 
 });
-
 
 
 //login 
