@@ -171,7 +171,7 @@ bot.on('message', message => {
                         embed.addField(`${commands[cmd].name}`, `**Description:** ${commands[cmd].desc}\n**Usage:** ${prefix + commands[cmd].usage}`);
 
                     }
-                    embed.setFooter(`Currently showing ${groupFound} commands. To view another group do ${prefix}help [group / command]`)
+                    embed.setFooter(`Currently showing USER commands. To view another group do ${prefix}help [group / command]`)
                     embed.setDescription(`**${commandsFound} commands found** - <> means required, [] means optional`)
 
                 }
