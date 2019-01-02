@@ -279,7 +279,7 @@ bot.on('message', message => {
 //bot: ready
 bot.on('ready', () => {
     console.log(`Logged in as ${bot.user.tag}.`);
-    bot.user.setActivity('Tizyl#4609', {type: 'Listening'});
+    bbot.user.setActivity('*help | Tizyl#4609', {type: 'Playing'});
 
 });
 
